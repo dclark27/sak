@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import { marked } from 'marked'
 import DOMPurify from 'isomorphic-dompurify'
 import TabButton from '@/components/ui/tab-button'
+import Textarea from '@/components/ui/textarea'
 
 const PLACEHOLDER = `# Hello, Markdown
 
@@ -45,19 +46,19 @@ export default function MarkdownPreview() {
       <div className={`grid gap-3 ${view === 'split' ? 'grid-cols-1 sm:grid-cols-2' : 'grid-cols-1'}`}>
         {view === 'split' && (
           <div>
-            <label className="block text-xs font-medium text-neutral-500 mb-1">Markdown</label>
-            <textarea
+            <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Markdown</label>
+            <Textarea
               value={source}
               onChange={(e) => setSource(e.target.value)}
-              className="w-full h-[calc(100vh-280px)] min-h-64 font-mono text-sm border border-neutral-200 px-3 py-2 resize-none focus:outline-none focus:border-neutral-400 leading-6"
+              className="w-full h-[calc(100vh-280px)] min-h-64 text-sm resize-none leading-6"
               spellCheck={false}
             />
           </div>
         )}
         <div>
-          <label className="block text-xs font-medium text-neutral-500 mb-1">Preview</label>
+          <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Preview</label>
           <div
-            className="border border-neutral-200 p-4 h-[calc(100vh-280px)] min-h-64 overflow-auto prose prose-sm prose-neutral max-w-none"
+            className="border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 p-4 h-[calc(100vh-280px)] min-h-64 overflow-auto prose prose-sm prose-neutral dark:prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --color-bg: #ffffff;
   --color-surface: #fafafa;
@@ -14,6 +16,22 @@
   --color-error: #dc2626;
   --color-added-bg: #f0fdf4;
   --color-removed-bg: #fef2f2;
+}
+
+.dark {
+  --color-bg: #0a0a0a;
+  --color-surface: #141414;
+  --color-border: #262626;
+  --color-fg: #ededed;
+  --color-muted: #a3a3a3;
+  --color-accent: #ededed;
+  --color-success-bg: #052e16;
+  --color-success: #4ade80;
+  --color-error-bg: #2d0a0a;
+  --color-error: #f87171;
+  --color-added-bg: #052e16;
+  --color-removed-bg: #2d0a0a;
+  color-scheme: dark;
 }
 
 @theme inline {

@@ -65,6 +65,20 @@ export const TOOLS: Tool[] = [
     category: 'convert',
     keywords: ['qr', 'qrcode', 'barcode', 'url', 'generate', 'image', 'png'],
   },
+  {
+    slug: 'timestamp',
+    name: 'Timestamp Converter',
+    description: 'Convert Unix timestamps to human-readable dates and back.',
+    category: 'convert',
+    keywords: ['timestamp', 'epoch', 'unix', 'date', 'time', 'convert', 'utc', 'iso'],
+  },
+  {
+    slug: 'base64',
+    name: 'Base64 Encode / Decode',
+    description: 'Encode text to Base64 or decode Base64 back to plain text.',
+    category: 'convert',
+    keywords: ['base64', 'encode', 'decode', 'convert', 'b64', 'url-safe'],
+  },
 ]
 
 export const CATEGORIES: { value: Category | 'all'; label: string }[] = [

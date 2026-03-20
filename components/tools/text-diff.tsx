@@ -2,6 +2,8 @@
 
 import { useState, useMemo } from 'react'
 import { diffLines, type Change } from 'diff'
+import Textarea from '@/components/ui/textarea'
+import Button from '@/components/ui/button'
 
 export default function TextDiff() {
   const [left, setLeft] = useState('')
@@ -30,22 +32,22 @@ export default function TextDiff() {
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <div>
-          <label className="block text-xs font-medium text-neutral-500 mb-1">Original</label>
-          <textarea
+          <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Original</label>
+          <Textarea
             value={left}
             onChange={(e) => setLeft(e.target.value)}
             placeholder="Paste original text here..."
-            className="w-full h-48 font-mono text-sm border border-neutral-200 px-3 py-2 resize-y focus:outline-none focus:border-neutral-400"
+            className="w-full h-48 text-sm resize-y"
             spellCheck={false}
           />
         </div>
         <div>
-          <label className="block text-xs font-medium text-neutral-500 mb-1">Changed</label>
-          <textarea
+          <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Changed</label>
+          <Textarea
             value={right}
             onChange={(e) => setRight(e.target.value)}
             placeholder="Paste changed text here..."
-            className="w-full h-48 font-mono text-sm border border-neutral-200 px-3 py-2 resize-y focus:outline-none focus:border-neutral-400"
+            className="w-full h-48 text-sm resize-y"
             spellCheck={false}
           />
         </div>
@@ -65,20 +67,20 @@ export default function TextDiff() {
               )}
             </div>
             {hasChanges && (
-              <button
+              <Button
                 onClick={() => setChangesOnly((v) => !v)}
-                className="text-xs border border-neutral-200 px-2 py-1 hover:bg-neutral-50 transition-colors"
+                className="text-xs px-2 py-1"
               >
                 {changesOnly ? 'Show all lines' : 'Changes only'}
-              </button>
+              </Button>
             )}
           </div>
-          <div className="border border-neutral-200 overflow-auto">
+          <div className="border border-neutral-200 dark:border-neutral-800 overflow-auto">
             <pre className="text-xs font-mono leading-5">
               {visibleDiff.map((part, i) => (
                 <div
                   key={i}
-                  className={part.added ? 'bg-green-50 text-green-800' : part.removed ? 'bg-red-50 text-red-800' : 'text-neutral-600'}
+                  className={part.added ? 'bg-green-50 dark:bg-green-950 text-green-800 dark:text-green-300' : part.removed ? 'bg-red-50 dark:bg-red-950 text-red-800 dark:text-red-300' : 'text-neutral-600 dark:text-neutral-400'}
                 >
                   {part.value.replace(/\n$/, '').split('\n').map((line, j) => (
                     <div key={j} className="px-3 flex">
@@ -96,7 +98,7 @@ export default function TextDiff() {
       )}
 
       {!left && !right && (
-        <p className="text-sm text-neutral-400 text-center py-8">
+        <p className="text-sm text-neutral-400 dark:text-neutral-500 text-center py-8">
           Paste text into both boxes to see the diff.
         </p>
       )}

@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef } from 'react'
 import QRCode from 'qrcode'
 import TabButton from '@/components/ui/tab-button'
+import Textarea from '@/components/ui/textarea'
+import Button from '@/components/ui/button'
 
 type ErrorLevel = 'L' | 'M' | 'Q' | 'H'
 
@@ -43,12 +45,12 @@ export default function QrCode() {
   return (
     <div className="space-y-4">
       <div>
-        <label className="block text-xs font-medium text-neutral-500 mb-1">Content</label>
-        <textarea
+        <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Content</label>
+        <Textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="https://example.com or any text..."
-          className="w-full h-24 font-mono text-sm border border-neutral-200 px-3 py-2 resize-none focus:outline-none focus:border-neutral-400"
+          className="w-full h-24 text-sm resize-none"
           spellCheck={false}
         />
       </div>
@@ -59,7 +61,7 @@ export default function QrCode() {
           <select
             value={size}
             onChange={(e) => setSize(Number(e.target.value))}
-            className="border border-neutral-200 px-2 py-1.5 text-sm focus:outline-none focus:border-neutral-400 bg-white"
+            className="border border-neutral-200 dark:border-neutral-800 px-2 py-1.5 text-sm focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 bg-white dark:bg-neutral-900 dark:text-neutral-100"
           >
             {[128, 192, 256, 384, 512].map((s) => (
               <option key={s} value={s}>{s}×{s}</option>
@@ -87,20 +89,17 @@ export default function QrCode() {
 
       {text.trim() && (
         <div className="flex flex-col items-start gap-3">
-          <div className="border border-neutral-200 p-3 inline-block">
+          <div className="border border-neutral-200 dark:border-neutral-800 p-3 inline-block dark:bg-white">
             <canvas ref={canvasRef} />
           </div>
-          <button
-            onClick={download}
-            className="text-sm bg-black text-white px-3 py-1.5 hover:bg-neutral-800 transition-colors"
-          >
+          <Button variant="primary" onClick={download}>
             Download PNG
-          </button>
+          </Button>
         </div>
       )}
 
       {!text.trim() && (
-        <p className="text-sm text-neutral-400 text-center py-8">
+        <p className="text-sm text-neutral-400 dark:text-neutral-500 text-center py-8">
           Enter some text or a URL above to generate a QR code.
         </p>
       )}

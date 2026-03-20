@@ -12,12 +12,12 @@ export default function ToolLayout({ name, description, children }: ToolLayoutPr
       <div className="mb-6">
         <Link
           href="/"
-          className="text-xs text-neutral-400 hover:text-neutral-600 transition-colors font-mono"
+          className="text-xs text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors font-mono"
         >
           ← sak
         </Link>
         <h1 className="mt-2 text-lg font-semibold">{name}</h1>
-        <p className="text-sm text-neutral-500 mt-0.5">{description}</p>
+        <p className="text-sm text-neutral-500 dark:text-neutral-400 mt-0.5">{description}</p>
       </div>
       {children}
     </main>

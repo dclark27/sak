@@ -1,6 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback, useRef } from 'react'
+import Textarea from '@/components/ui/textarea'
+import Button from '@/components/ui/button'
 
 const STORAGE_KEY = 'sak-scratchpad'
 const CONFIRM_TIMEOUT = 3000
@@ -67,11 +69,11 @@ export default function Scratchpad() {
   return (
     <div className="space-y-3">
       <div className="relative">
-        <textarea
+        <Textarea
           value={text}
           onChange={(e) => handleChange(e.target.value)}
           placeholder="Start typing... your notes are saved automatically."
-          className="w-full h-[calc(100vh-280px)] min-h-64 font-mono text-sm border border-neutral-200 px-3 py-2 resize-none focus:outline-none focus:border-neutral-400 leading-6"
+          className="w-full h-[calc(100vh-280px)] min-h-64 text-sm resize-none leading-6"
           spellCheck={false}
           autoFocus
         />
@@ -92,18 +94,20 @@ export default function Scratchpad() {
               Last saved {savedAt.toLocaleTimeString()}
             </span>
           )}
-          <button
+          <Button
             onClick={download}
             disabled={!text}
-            className="border border-neutral-200 px-2 py-1 hover:bg-neutral-50 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+            className="text-xs px-2 py-1"
           >
             Download .txt
-          </button>
+          </Button>
           <button
             onClick={clear}
             disabled={!text}
-            className={`border px-2 py-1 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
-              confirming ? 'border-red-300 text-red-600 hover:bg-red-50' : 'border-neutral-200 hover:bg-neutral-50'
+            className={`text-xs border px-2 py-1 transition-colors disabled:opacity-40 disabled:cursor-not-allowed ${
+              confirming
+                ? 'border-red-300 dark:border-red-800 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950'
+                : 'border-neutral-200 dark:border-neutral-800 dark:text-neutral-300 hover:bg-neutral-50 dark:hover:bg-neutral-900'
             }`}
           >
             {confirming ? 'Sure?' : 'Clear'}

@@ -30,7 +30,7 @@ export default function ToolSearch() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search tools..."
-          className="flex-1 border border-neutral-200 px-3 py-2 text-sm focus:outline-none focus:border-neutral-400 font-mono"
+          className="flex-1 border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 font-mono"
           autoComplete="off"
         />
         <div className="flex gap-1">
@@ -40,8 +40,8 @@ export default function ToolSearch() {
               onClick={() => setCategory(cat.value)}
               className={`text-xs px-3 py-2 border transition-colors ${
                 category === cat.value
-                  ? 'bg-black text-white border-black'
-                  : 'border-neutral-200 hover:bg-neutral-50'
+                  ? 'bg-black text-white border-black dark:bg-white dark:text-black dark:border-white'
+                  : 'border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-900 dark:text-neutral-300'
               }`}
             >
               {cat.label}
@@ -57,7 +57,7 @@ export default function ToolSearch() {
           ))}
         </div>
       ) : (
-        <div className="py-16 text-center text-sm text-neutral-400">
+        <div className="py-16 text-center text-sm text-neutral-400 dark:text-neutral-500">
           No tools match &ldquo;{query}&rdquo;
           <button
             onClick={() => {

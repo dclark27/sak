@@ -1,8 +1,11 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useCopy } from '@/hooks/use-copy'
 import TabButton from '@/components/ui/tab-button'
+import Input from '@/components/ui/input'
+import Button from '@/components/ui/button'
+import Textarea from '@/components/ui/textarea'
+import CopyButton from '@/components/ui/copy-button'
 
 // Classic Lorem Ipsum (scrambled Cicero Latin)
 const WORDS_LA = [
@@ -102,7 +105,6 @@ export default function LoremIpsum() {
   const [startWithLorem, setStartWithLorem] = useState(true)
   const [lang, setLang] = useState<Lang>('la')
   const [output, setOutput] = useState(() => generateText('paragraphs', 3, true, 'la'))
-  const { isCopied, copy } = useCopy()
 
   const generate = useCallback(() => {
     setOutput(generateText(mode, count, startWithLorem, lang))
@@ -120,13 +122,13 @@ export default function LoremIpsum() {
         </div>
         <div className="flex items-center gap-2">
           <label className="text-xs text-neutral-500">Count</label>
-          <input
+          <Input
             type="number"
             min={1}
             max={50}
             value={count}
             onChange={(e) => setCount(Math.max(1, Math.min(50, Number(e.target.value))))}
-            className="w-16 border border-neutral-200 px-2 py-1.5 text-sm text-center font-mono focus:outline-none focus:border-neutral-400"
+            className="w-16 text-sm text-center"
           />
         </div>
         <label className="flex items-center gap-2 text-xs text-neutral-500 cursor-pointer">
@@ -141,18 +143,13 @@ export default function LoremIpsum() {
       </div>
 
       <div className="flex gap-2">
-        <button
+        <Button
+          variant="primary"
           onClick={generate}
-          className="text-sm bg-black text-white px-3 py-1.5 hover:bg-neutral-800 transition-colors"
         >
           Generate
-        </button>
-        <button
-          onClick={() => copy(output)}
-          className="text-sm border border-neutral-300 px-3 py-1.5 hover:bg-neutral-50 transition-colors"
-        >
-          {isCopied() ? 'Copied!' : 'Copy'}
-        </button>
+        </Button>
+        <CopyButton text={output} className="text-sm px-3 py-1.5" />
         {lang === 'en' && (
           <span className="text-xs text-neutral-400 self-center ml-1">
             ✦ rough translation of the actual Cicero passage
@@ -165,7 +162,7 @@ export default function LoremIpsum() {
           <button
             onClick={() => setLang('la')}
             title="Classic Lorem Ipsum (Latin)"
-            className={`transition-all ${lang === 'la' ? 'text-neutral-800 font-semibold' : 'text-neutral-300 hover:text-neutral-700 hover:font-medium'}`}
+            className={`transition-all ${lang === 'la' ? 'text-neutral-800 dark:text-neutral-200 font-semibold' : 'text-neutral-300 dark:text-neutral-600 hover:text-neutral-700 dark:hover:text-neutral-400 hover:font-medium'}`}
           >
             LA
           </button>
@@ -173,15 +170,15 @@ export default function LoremIpsum() {
           <button
             onClick={() => setLang('en')}
             title="Rough English translation"
-            className={`transition-all ${lang === 'en' ? 'text-neutral-800 font-semibold' : 'text-neutral-300 hover:text-neutral-700 hover:font-medium'}`}
+            className={`transition-all ${lang === 'en' ? 'text-neutral-800 dark:text-neutral-200 font-semibold' : 'text-neutral-300 dark:text-neutral-600 hover:text-neutral-700 dark:hover:text-neutral-400 hover:font-medium'}`}
           >
             EN
           </button>
         </div>
-        <textarea
+        <Textarea
           readOnly
           value={output}
-          className="w-full h-64 font-mono text-sm border border-neutral-200 pl-3 pr-14 py-2 resize-y bg-neutral-50 focus:outline-none scrollbar-hide"
+          className="w-full h-64 text-sm resize-y bg-neutral-50 dark:bg-neutral-900 pl-3 pr-14 scrollbar-hide"
           onClick={(e) => (e.target as HTMLTextAreaElement).select()}
         />
       </div>

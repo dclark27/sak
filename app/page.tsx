@@ -30,7 +30,7 @@ export default function HomePage() {
         </p>
       </div>
       <ToolSearch />
-      <footer className="mt-16 pt-6 border-t border-neutral-100 text-xs text-neutral-400">
+      <footer className="mt-16 pt-6 border-t border-neutral-100 dark:border-neutral-800 text-xs text-neutral-400 dark:text-neutral-500">
         Free, open source, no ads, no tracking.
       </footer>
     </main>
