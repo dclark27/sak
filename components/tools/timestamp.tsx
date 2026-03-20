@@ -21,7 +21,7 @@ function relativeTime(date: Date): string {
   return fmt(abs / (86400 * 365), 'year')
 }
 
-function detectInput(raw: string): { type: 'epoch-s' | 'epoch-ms' | 'date' | 'unknown'; date: Date | null } {
+function detectInput(raw: string): { type: 'epoch-s' | 'epoch-ms' | 'epoch-µs' | 'date' | 'unknown'; date: Date | null } {
   const trimmed = raw.trim()
   if (!trimmed) return { type: 'unknown', date: null }
 
@@ -32,6 +32,10 @@ function detectInput(raw: string): { type: 'epoch-s' | 'epoch-ms' | 'date' | 'un
   if (/^\d{11,13}$/.test(trimmed)) {
     const date = new Date(parseInt(trimmed))
     return { type: 'epoch-ms', date: isNaN(date.getTime()) ? null : date }
+  }
+  if (/^\d{14,16}$/.test(trimmed)) {
+    const date = new Date(parseInt(trimmed) / 1000)
+    return { type: 'epoch-µs', date: isNaN(date.getTime()) ? null : date }
   }
 
   const date = new Date(trimmed)
@@ -76,6 +80,7 @@ export default function Timestamp() {
     ? [
         { label: 'Unix (seconds)', value: String(Math.floor(date.getTime() / 1000)), key: 'unix-s' },
         { label: 'Unix (ms)', value: String(date.getTime()), key: 'unix-ms' },
+        { label: 'Unix (µs)', value: String(date.getTime() * 1000), key: 'unix-µs' },
         { label: 'ISO 8601', value: date.toISOString(), key: 'iso' },
         { label: tz === 'utc' ? 'UTC' : 'Local time', value: date.toLocaleString('en-US', tzOpts(date)), key: 'human' },
         { label: 'Relative', value: relativeTime(date), key: 'relative' },
@@ -147,7 +152,7 @@ export default function Timestamp() {
 
         {detected.type !== 'unknown' && date && (
           <p className="text-xs text-neutral-400 font-mono">
-            Detected: {detected.type === 'epoch-s' ? 'Unix timestamp (seconds)' : detected.type === 'epoch-ms' ? 'Unix timestamp (milliseconds)' : 'date string'}
+            Detected: {detected.type === 'epoch-s' ? 'Unix timestamp (seconds)' : detected.type === 'epoch-ms' ? 'Unix timestamp (milliseconds)' : detected.type === 'epoch-µs' ? 'Unix timestamp (microseconds)' : 'date string'}
           </p>
         )}
 
@@ -167,7 +172,7 @@ export default function Timestamp() {
       {/* Quick reference */}
       <div className="text-xs text-neutral-400 dark:text-neutral-500 space-y-1">
         <p className="font-medium text-neutral-500 dark:text-neutral-400">Quick reference</p>
-        <p>10 digits = Unix seconds &nbsp;·&nbsp; 13 digits = Unix milliseconds</p>
+        <p>10 digits = Unix seconds &nbsp;·&nbsp; 13 digits = Unix milliseconds &nbsp;·&nbsp; 16 digits = Unix microseconds</p>
         <p>Accepts ISO 8601, RFC 2822, and most natural date strings</p>
       </div>
     </div>

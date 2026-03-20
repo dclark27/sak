@@ -79,6 +79,13 @@ export const TOOLS: Tool[] = [
     category: 'convert',
     keywords: ['base64', 'encode', 'decode', 'convert', 'b64', 'url-safe'],
   },
+  {
+    slug: 'logo-generator',
+    name: 'Logo Generator',
+    description: 'Generate random pixel glyphs. Export as PNG, favicon, and app icons.',
+    category: 'media',
+    keywords: ['logo', 'icon', 'glyph', 'pixel', 'generate', 'favicon', 'png', 'sprite'],
+  },
 ]
 
 export const CATEGORIES: { value: Category | 'all'; label: string }[] = [
