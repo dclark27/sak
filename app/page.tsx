@@ -48,8 +48,7 @@ export default function HomePage() {
       <div className="mb-8">
         <h1 className="text-2xl font-bold font-mono">sak</h1>
         <p className="mt-1 text-sm text-neutral-500">
-          A no-ads Swiss army knife for the web.{' '}
-          <span className="text-neutral-400">Fast. Simple. Free.</span>
+          A no-ads Swiss army knife for the web.
         </p>
       </div>
       <Suspense>

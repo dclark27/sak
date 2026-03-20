@@ -62,6 +62,7 @@ export default function Timestamp() {
   const { isCopied, copy } = useCopy()
 
   useEffect(() => {
+    setNow(new Date())
     intervalRef.current = setInterval(() => setNow(new Date()), 1000)
     return () => { if (intervalRef.current) clearInterval(intervalRef.current) }
   }, [])
@@ -98,6 +99,7 @@ export default function Timestamp() {
             onClick={() => copy(String(Math.floor(now.getTime() / 1000)), 'now-s')}
             className="font-mono text-3xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-100 hover:text-neutral-500 dark:hover:text-neutral-400 transition-colors tabular-nums"
             title="Click to copy"
+            suppressHydrationWarning
           >
             {Math.floor(now.getTime() / 1000)}
           </button>
@@ -108,6 +110,7 @@ export default function Timestamp() {
             onClick={() => copy(String(now.getTime()), 'now-ms')}
             className="font-mono text-lg text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300 transition-colors tabular-nums"
             title="Click to copy"
+            suppressHydrationWarning
           >
             {now.getTime()}
           </button>
