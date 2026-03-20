@@ -1,17 +1,18 @@
 import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
+import { Figtree, IBM_Plex_Mono } from 'next/font/google'
 import Nav from '@/components/nav'
 import ThemeProvider from '@/components/theme-provider'
 import './globals.css'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
+const geistSans = Figtree({
+  variable: '--font-figtree-sans',
   subsets: ['latin'],
 })
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
+const ibmPlexMono = IBM_Plex_Mono({
+  variable: '--font-ibm-plex-mono',
   subsets: ['latin'],
+  weight: ['400', '500', '600'],
 })
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://saktools.com'
@@ -46,7 +47,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">
