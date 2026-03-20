@@ -24,12 +24,16 @@ export default function QrCode() {
 
   useEffect(() => {
     if (!canvasRef.current || !text.trim()) return
-    QRCode.toCanvas(canvasRef.current, text, {
-      width: size,
-      margin: 2,
-      errorCorrectionLevel: errorLevel,
-      color: { dark: '#0a0a0a', light: '#ffffff' },
-    }).then(() => setError('')).catch((e: Error) => setError(e.message))
+    const timer = setTimeout(() => {
+      if (!canvasRef.current) return
+      QRCode.toCanvas(canvasRef.current, text, {
+        width: size,
+        margin: 2,
+        errorCorrectionLevel: errorLevel,
+        color: { dark: '#0a0a0a', light: '#ffffff' },
+      }).then(() => setError('')).catch((e: Error) => setError(e.message))
+    }, 300)
+    return () => clearTimeout(timer)
   }, [text, size, errorLevel])
 
   const download = () => {

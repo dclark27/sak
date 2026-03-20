@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback } from 'react'
+import { useState } from 'react'
 import Textarea from '@/components/ui/textarea'
 import Button from '@/components/ui/button'
 import Pre from '@/components/ui/pre'
@@ -14,7 +14,7 @@ export default function JsonFormatter() {
   const [status, setStatus] = useState<Status>('idle')
   const [error, setError] = useState('')
 
-  const parse = useCallback((value: string): unknown | null => {
+  const parse = (value: string): unknown | null => {
     try {
       const parsed = JSON.parse(value)
       setStatus('valid')
@@ -25,7 +25,7 @@ export default function JsonFormatter() {
       setError((e as SyntaxError).message)
       return null
     }
-  }, [])
+  }
 
   const format = () => {
     const parsed = parse(input)
