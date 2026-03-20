@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 import ThemeToggle from '@/components/theme-toggle'
 
 export default function Nav() {
@@ -7,9 +8,10 @@ export default function Nav() {
       <div className="max-w-5xl mx-auto px-4 h-12 flex items-center">
         <Link
           href="/"
-          className="font-mono font-bold text-sm tracking-tight hover:opacity-70 transition-opacity"
+          className="flex items-center gap-2 hover:opacity-70 transition-opacity"
         >
-          sak
+          <Image src="/favicon.png" alt="sak" width={20} height={20} className="dark:invert" />
+          <span className="font-mono font-bold text-sm tracking-tight">sak</span>
         </Link>
         <span className="ml-3 text-xs text-neutral-400 hidden sm:inline">
           swiss army knife

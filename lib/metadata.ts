@@ -11,7 +11,7 @@ export function toolMetadata(slug: string): Metadata {
     title: tool.name,
     description: `${tool.description} Free, no ads, no tracking.`,
     alternates: {
-      canonical: `${BASE_URL}/tools/${slug}`,
+      canonical: `${BASE_URL}/${slug}`,
     },
     openGraph: {
       title: tool.name,

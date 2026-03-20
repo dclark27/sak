@@ -7,8 +7,8 @@ import TabButton from '@/components/ui/tab-button'
 import Button from '@/components/ui/button'
 import Input from '@/components/ui/input'
 
-const GRID_SIZES = [9, 15, 21, 31] as const
-const BLOCK_SIZES = [8, 12, 16, 24] as const
+const GRID_SIZES = [8, 16, 32, 64, 128] as const
+const BLOCK_SIZE = 8 // fixed display: 8px per cell (64px–1024px canvas)
 
 const SYMMETRY_OPTIONS: { value: Symmetry; label: string; title: string }[] = [
   { value: 'none', label: 'None', title: 'No symmetry' },
@@ -17,24 +17,49 @@ const SYMMETRY_OPTIONS: { value: Symmetry; label: string; title: string }[] = [
   { value: 'both', label: '✦', title: 'Mirror both axes' },
 ]
 
-const EXPORT_SIZES = [
-  { label: 'PNG', size: 0, filename: 'logo.png' },
-  { label: 'Favicon 32', size: 32, filename: 'favicon.png' },
-  { label: 'Icon 180', size: 180, filename: 'apple-touch-icon.png' },
-  { label: 'Icon 192', size: 192, filename: 'icon-192.png' },
-  { label: 'Icon 512', size: 512, filename: 'icon-512.png' },
+type ColorScheme = 'light' | 'dark' | 'transparent'
+
+const COLOR_SCHEMES: { value: ColorScheme; label: string; fg: string; bg: string }[] = [
+  { value: 'light', label: 'Light', fg: '#0a0a0a', bg: '#ffffff' },
+  { value: 'dark', label: 'Dark', fg: '#ffffff', bg: '#0a0a0a' },
+  { value: 'transparent', label: 'Clear', fg: '#0a0a0a', bg: 'transparent' },
+]
+
+const SITE_PACK = [
+  { size: 32, filename: 'favicon.png' },
+  { size: 180, filename: 'apple-touch-icon.png' },
+  { size: 192, filename: 'icon-192.png' },
+  { size: 512, filename: 'icon-512.png' },
 ] as const
 
 function randomSeed() {
   return String(Math.floor(Math.random() * 0xffffff))
 }
 
+// Checkered transparency pattern for the preview background
+const CHECKER =
+  'repeating-conic-gradient(#e5e5e5 0% 25%, #ffffff 0% 50%) 0 0 / 16px 16px'
+const CHECKER_DARK =
+  'repeating-conic-gradient(#2a2a2a 0% 25%, #1a1a1a 0% 50%) 0 0 / 16px 16px'
+
 export default function LogoGenerator() {
   const [seedStr, setSeedStr] = useState(() => randomSeed())
-  const [gridSize, setGridSize] = useState<typeof GRID_SIZES[number]>(15)
-  const [blockSize, setBlockSize] = useState<typeof BLOCK_SIZES[number]>(16)
+  const [gridSize, setGridSize] = useState<typeof GRID_SIZES[number]>(16)
   const [symmetry, setSymmetry] = useState<Symmetry>('x')
+  const [scheme, setScheme] = useState<ColorScheme>('light')
+  const [isDark, setIsDark] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  // Track dark mode for checker pattern
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)')
+    setIsDark(mq.matches)
+    const handler = (e: MediaQueryListEvent) => setIsDark(e.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const { fg, bg } = COLOR_SCHEMES.find((s) => s.value === scheme)!
 
   const grid = useCallback(() => {
     const seed = /^\d+$/.test(seedStr) ? parseInt(seedStr) : hashSeed(seedStr)
@@ -44,28 +69,41 @@ export default function LogoGenerator() {
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
-    const g = grid()
-    const src = renderGlyphToCanvas(g, blockSize)
+    const src = renderGlyphToCanvas(grid(), BLOCK_SIZE, fg, bg)
     canvas.width = src.width
     canvas.height = src.height
-    canvas.getContext('2d')!.drawImage(src, 0, 0)
-  }, [grid, blockSize])
+    const ctx = canvas.getContext('2d')!
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+    ctx.drawImage(src, 0, 0)
+  }, [grid, fg, bg])
 
   const handleExport = (size: number, filename: string) => {
     const g = grid()
     const canvas = size === 0
-      ? renderGlyphToCanvas(g, blockSize)
-      : renderGlyphAtSize(g, size)
+      ? renderGlyphToCanvas(g, BLOCK_SIZE, fg, bg)
+      : renderGlyphAtSize(g, size, fg, bg)
     downloadCanvas(canvas, filename)
   }
+
+  const handleSitePack = () => {
+    const g = grid()
+    SITE_PACK.forEach(({ size, filename }, i) => {
+      setTimeout(() => downloadCanvas(renderGlyphAtSize(g, size, fg, bg), filename), i * 200)
+    })
+  }
+
+  const previewBg = scheme === 'transparent'
+    ? (isDark ? CHECKER_DARK : CHECKER)
+    : undefined
 
   return (
     <div className="space-y-6">
       {/* Preview */}
-      <div className="flex justify-center">
-        <div className="border border-neutral-200 dark:border-neutral-800 p-4 inline-block">
-          <canvas ref={canvasRef} style={{ imageRendering: 'pixelated' }} />
-        </div>
+      <div
+        className="inline-block"
+        style={{ background: previewBg }}
+      >
+        <canvas ref={canvasRef} style={{ imageRendering: 'pixelated', display: 'block' }} />
       </div>
 
       {/* Controls */}
@@ -82,9 +120,27 @@ export default function LogoGenerator() {
               placeholder="any text or number"
               className="flex-1 text-sm"
             />
-            <Button onClick={() => setSeedStr(randomSeed())} title="Shuffle">
+            <Button onClick={() => setSeedStr(randomSeed())} title="Randomize">
               ⟳
             </Button>
+          </div>
+        </div>
+
+        {/* Color scheme */}
+        <div>
+          <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
+            Colors
+          </label>
+          <div className="flex gap-1">
+            {COLOR_SCHEMES.map((s) => (
+              <TabButton
+                key={s.value}
+                active={scheme === s.value}
+                onClick={() => setScheme(s.value)}
+              >
+                {s.label}
+              </TabButton>
+            ))}
           </div>
         </div>
 
@@ -125,39 +181,24 @@ export default function LogoGenerator() {
             ))}
           </div>
         </div>
-
-        {/* Block size */}
-        <div>
-          <label className="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">
-            Scale
-          </label>
-          <div className="flex gap-1">
-            {BLOCK_SIZES.map((s) => (
-              <TabButton
-                key={s}
-                active={blockSize === s}
-                onClick={() => setBlockSize(s)}
-                title={`${s}px per cell`}
-              >
-                {s}px
-              </TabButton>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Export */}
       <div>
         <p className="text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-2">Export</p>
         <div className="flex flex-wrap gap-2">
-          {EXPORT_SIZES.map(({ label, size, filename }) => (
-            <Button key={label} onClick={() => handleExport(size, filename)}>
-              {label}
-            </Button>
-          ))}
+          <Button onClick={() => handleExport(0, 'logo.png')}>PNG</Button>
+          <Button onClick={() => handleExport(32, 'favicon.png')}>Favicon 32</Button>
+          <Button onClick={() => handleExport(180, 'apple-touch-icon.png')}>Icon 180</Button>
+          <Button onClick={() => handleExport(192, 'icon-192.png')}>Icon 192</Button>
+          <Button onClick={() => handleExport(512, 'icon-512.png')}>Icon 512</Button>
+          <Button variant="primary" onClick={handleSitePack} title="Download favicon.png, apple-touch-icon.png, icon-192.png, icon-512.png">
+            Site Pack ↓
+          </Button>
         </div>
         <p className="mt-2 text-xs text-neutral-400 dark:text-neutral-500">
-          All exports are PNG. Use a converter for .ico if needed.
+          All exports are PNG. &ldquo;Site Pack&rdquo; downloads all four icon sizes at once.
+          {scheme === 'transparent' && ' Clear exports preserve transparency.'}
         </p>
       </div>
     </div>

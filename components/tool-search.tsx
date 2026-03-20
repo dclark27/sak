@@ -1,12 +1,22 @@
 'use client'
 
 import { useState, useMemo } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { TOOLS, CATEGORIES, type Category } from '@/lib/tools'
 import ToolCard from '@/components/tool-card'
 
 export default function ToolSearch() {
-  const [query, setQuery] = useState('')
+  const searchParams = useSearchParams()
+  const router = useRouter()
+  const [query, setQuery] = useState(searchParams.get('q') ?? '')
   const [category, setCategory] = useState<Category | 'all'>('all')
+
+  function handleQueryChange(value: string) {
+    setQuery(value)
+    const params = new URLSearchParams()
+    if (value) params.set('q', value)
+    router.replace(value ? `/?${params}` : '/', { scroll: false })
+  }
 
   const filtered = useMemo(() => {
     const q = query.toLowerCase().trim()
@@ -28,7 +38,7 @@ export default function ToolSearch() {
         <input
           type="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => handleQueryChange(e.target.value)}
           placeholder="Search tools..."
           className="flex-1 border border-neutral-200 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 px-3 py-2 text-sm focus:outline-none focus:border-neutral-400 dark:focus:border-neutral-600 font-mono"
           autoComplete="off"
@@ -61,7 +71,7 @@ export default function ToolSearch() {
           No tools match &ldquo;{query}&rdquo;
           <button
             onClick={() => {
-              setQuery('')
+              handleQueryChange('')
               setCategory('all')
             }}
             className="ml-2 underline hover:no-underline"

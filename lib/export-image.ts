@@ -11,8 +11,10 @@ export function renderGlyphToCanvas(
   canvas.width = px
   canvas.height = px
   const ctx = canvas.getContext('2d')!
-  ctx.fillStyle = bg
-  ctx.fillRect(0, 0, px, px)
+  if (bg !== 'transparent') {
+    ctx.fillStyle = bg
+    ctx.fillRect(0, 0, px, px)
+  }
   ctx.fillStyle = fg
   for (let y = 0; y < size; y++) {
     for (let x = 0; x < size; x++) {
@@ -38,8 +40,10 @@ export function renderGlyphAtSize(
   dest.width = targetSize
   dest.height = targetSize
   const ctx = dest.getContext('2d')!
-  ctx.fillStyle = bg
-  ctx.fillRect(0, 0, targetSize, targetSize)
+  if (bg !== 'transparent') {
+    ctx.fillStyle = bg
+    ctx.fillRect(0, 0, targetSize, targetSize)
+  }
   ctx.imageSmoothingEnabled = false
   const ox = Math.floor((targetSize - rendered.width) / 2)
   const oy = Math.floor((targetSize - rendered.height) / 2)

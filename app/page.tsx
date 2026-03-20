@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import ToolSearch from '@/components/tool-search'
 
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://saktools.com'
@@ -51,7 +52,9 @@ export default function HomePage() {
           <span className="text-neutral-400">Fast. Simple. Free.</span>
         </p>
       </div>
-      <ToolSearch />
+      <Suspense>
+        <ToolSearch />
+      </Suspense>
       <footer className="mt-16 pt-6 border-t border-neutral-100 dark:border-neutral-800 text-xs text-neutral-400 dark:text-neutral-500">
         Free, open source, no ads, no tracking.
       </footer>

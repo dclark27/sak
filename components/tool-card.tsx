@@ -12,7 +12,7 @@ const CATEGORY_LABELS: Record<string, string> = {
 export default function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
-      href={`/tools/${tool.slug}`}
+      href={`/${tool.slug}`}
       className="block border border-neutral-200 dark:border-neutral-800 p-4 hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
     >
       <div className="flex items-start justify-between gap-2">

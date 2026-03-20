@@ -32,6 +32,10 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     images: ['/og'],
   },
+  icons: {
+    icon: [{ url: '/favicon.png', type: 'image/png', sizes: '32x32' }],
+    apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
+  },
 }
 
 export default function RootLayout({

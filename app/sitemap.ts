@@ -5,7 +5,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://saktools.com'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const toolPages = TOOLS.map((tool) => ({
-    url: `${BASE_URL}/tools/${tool.slug}`,
+    url: `${BASE_URL}/${tool.slug}`,
     lastModified: new Date(),
     changeFrequency: 'monthly' as const,
     priority: 0.8,
