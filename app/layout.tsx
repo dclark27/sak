@@ -38,6 +38,9 @@ export const metadata: Metadata = {
     icon: [{ url: '/favicon.png', type: 'image/png', sizes: '32x32' }],
     apple: [{ url: '/apple-touch-icon.png', sizes: '180x180' }],
   },
+  verification: {
+    google: 'IXmLTOL3r4BlVPZu4xRhXbfO8-M4ZvaM9DR2SIEKAkM'
+  }
 }
 
 export default function RootLayout({
