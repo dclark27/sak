@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Figtree, IBM_Plex_Mono } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/next'
 import Nav from '@/components/nav'
 import ThemeProvider from '@/components/theme-provider'
 import './globals.css'
@@ -55,6 +56,7 @@ export default function RootLayout({
           <Nav />
           {children}
         </ThemeProvider>
+        <Analytics />
       </body>
     </html>
   )
